@@ -64,7 +64,7 @@
 
 - name: fetch jquery so we can serve it locally
   sudo: True
-  get_url: 
+  get_url:
     url=https://ajax.googleapis.com/ajax/libs/jquery/{{ item.version }}/jquery.min.js
     sha256sum={{ item.sha256sum }}
     dest=/home/crypton_server/vendor/jquery/{{ item.version }}/jquery.min.js

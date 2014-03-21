@@ -51,7 +51,7 @@ app.io.set('authorization', function (handshakeData, accept) {
       app.log('debug', 'websocket authorization failed due to invalid cookie');
       return accept('Cookie is invalid.', false);
     }
-  } 
+  }
 
   app.log('debug', 'websocket authorization successful');
   accept(null, true);

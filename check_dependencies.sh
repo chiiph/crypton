@@ -3,7 +3,7 @@
 #postgresql checks
 if which psql > /dev/null; then
   echo "Found psql..."
-else 
+else
   echo "Postgres is not installed, psql not located"
   exit 1;
 fi
@@ -11,7 +11,7 @@ fi
 POSTGRES_VERSION="$(psql -V | grep -o 9)"
 if [ "$POSTGRES_VERSION" = "9" ]; then
   echo "Found postgres 9.x..."
-else 
+else
   echo "Postgres 9.x is required for Crypton"
   echo "On Linux please install the latest postgres server package"
   echo "On MacOS X please install postgres via Homebrew or Postgresql.app"
@@ -46,7 +46,7 @@ fi
 NODE_VERSION="$($NODECMD --version | grep -o "0.10.")"
 if [ "$NODE_VERSION" = "0.10."  ]; then
   echo "Found node 0.10.x..."
-else 
+else
   echo "Node.js 0.10.x is required for Crypton"
   echo "Please install Node.js 0.10.x"
   exit 1;
@@ -55,7 +55,7 @@ fi
 # redis-server checks
 if which redis-server >/dev/null; then
   echo "Found redis-server..."
-else 
+else
   echo "Redis is not installed, \`which redis-server\` failed"
   echo "Please install Redis 2.6.x or 2.8.x"
   exit 1;
@@ -66,7 +66,7 @@ if [ "$REDIS_VERSION" = "2.6"  ]; then
   echo "Found redis 2.6.x..."
 elif [ "$REDIS_VERSION" = "2.8"  ]; then
   echo "Found redis 2.8.x..."
-else 
+else
   echo "Redis 2.6.x or 2.8.x are required for Crypton"
   echo "You have: `redis-server --version`"
   exit 1;

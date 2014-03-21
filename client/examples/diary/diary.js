@@ -186,7 +186,7 @@ function createEntry () {
   window.entry = {};
   entry.time = +new Date();
   entry.body = '';
-  
+
   showPad();
   renderDate();
 }

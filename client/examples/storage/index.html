@@ -69,7 +69,7 @@ $(document).ready(function () {
 
 function getCollection () {
   $status.text('loading notepad');
-  
+
   session.load('notepad', function (err, container) {
     if (err) {
       session.create('notepad', function (err, container) {

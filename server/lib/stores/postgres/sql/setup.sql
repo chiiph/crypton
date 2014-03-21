@@ -369,7 +369,7 @@ create table message (
     headers_ciphertext varchar not null,
     payload_ciphertext varchar not null,
     deletion_time timestamp
-    constraint deleted_after_created 
+    constraint deleted_after_created
         check (deletion_time is null or deletion_time >= creation_time)
 /*
     constraint header_ciphertext_len_modulo
@@ -384,15 +384,15 @@ create table message (
 );
 
 COMMENT ON TABLE message IS 'realtime messages between accounts';
-COMMENT ON COLUMN message.ttl IS 
+COMMENT ON COLUMN message.ttl IS
 'Optional field to denote a message as transient, having an end time.  Messages
 may be automatically deleted by the server after this interval.';
-COMMENT ON COLUMN message.deletion_time IS 
+COMMENT ON COLUMN message.deletion_time IS
 'the time the server marks a message as having been deleted by the recipient.
 rows for deleted messages may optionally also be deleted entirely.';
 COMMENT ON COLUMN message.headers_ciphertext IS
 'AES-GCM of header, key=hash(data key)';
-COMMENT ON COLUMN message.payload_ciphertext IS 
+COMMENT ON COLUMN message.payload_ciphertext IS
 'AES-GCM of payload, key=hash(data key)';
 
 create table transaction (
@@ -416,7 +416,7 @@ select *
   from transaction t1
  where commit_request_time is not null
    and commit_start_time is null
-   and not exists (select 1 
+   and not exists (select 1
                      from transaction t2
                     where commit_request_time is not null
                       and commit_start_time is null
@@ -538,7 +538,7 @@ create table transaction_delete_container (
     latest_record_id int8 /* not null */
 );
 /* disallow deleting the same container name twice in the same transaction */
-create unique index transaction_delete_container_tx_name_idx 
+create unique index transaction_delete_container_tx_name_idx
     on transaction_delete_container (transaction_id, name_hmac);
 
 create table transaction_add_container_session_key (
@@ -564,8 +564,8 @@ create table transaction_add_container_session_key_share (
 );
 /* disallow adding more than one session key share for the same container to
  * the same account in the same transaction */
-create unique index transaction_add_container_session_key_share_name_acct_idx 
-    on transaction_add_container_session_key_share 
+create unique index transaction_add_container_session_key_share_name_acct_idx
+    on transaction_add_container_session_key_share
     (transaction_id, name_hmac, to_account_id);
 
 create table transaction_delete_container_session_key_share (
@@ -579,7 +579,7 @@ create table transaction_delete_container_session_key_share (
 /* disallow deleting a session key share for the same container to the same
  * account more than once per transaction */
 create unique index transaction_delete_container_session_key_share_acct_idx
-    on transaction_delete_container_session_key_share 
+    on transaction_delete_container_session_key_share
     (transaction_id, name_hmac, to_account_id);
 
 create table transaction_add_container_record (

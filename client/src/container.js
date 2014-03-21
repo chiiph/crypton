@@ -47,7 +47,7 @@ var Container = crypton.Container = function (session) {
  * Calls back without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {String} key
  * @param {Function} callback
  */
@@ -68,7 +68,7 @@ Container.prototype.add = function (key, callback) {
  * Calls back with `value` and without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {String} key
  * @param {Function} callback
  */
@@ -89,7 +89,7 @@ Container.prototype.get = function (key, callback) {
  * Calls back without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {Function} callback
  * @param {Object} options (optional)
  */
@@ -152,7 +152,7 @@ Container.prototype.save = function (callback, options) {
  * Calls back with diff object and without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {Function} callback
  */
 Container.prototype.getDiff = function (callback) {
@@ -222,7 +222,7 @@ Container.prototype.getPublicName = function () {
  * Calls back with diff object and without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {Function} callback
  */
 Container.prototype.getHistory = function (callback) {
@@ -252,7 +252,7 @@ Container.prototype.getHistory = function (callback) {
  * and without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {Array} records
  * @param {Function} callback
  */
@@ -366,7 +366,7 @@ Container.prototype.decryptKey = function (record) {
  * Calls back without error if successful
  *
  * Calls back with error if unsuccessful
- * 
+ *
  * @param {Function} callback
  */
 Container.prototype.sync = function (callback) {

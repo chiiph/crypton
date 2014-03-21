@@ -57,7 +57,7 @@ var accountHandler = function (err, account) {
       // alert the user, adjust application flow
       return;
     }
-  
+
   });
 });
 ````
@@ -73,7 +73,7 @@ crypton.authorize(handle, passPhrase, function (err, session) {
     return;
   }
 
-  
+
 });
 ````
 
@@ -163,7 +163,7 @@ diaryDrafts.push(newEntry);
 // changes to either diaryEntries or diaryDrafts, both would be saved. The
 // default parameters for saving objects preserves object history (i.e. previous
 // versions of the object are still reachable) and uses diffing where
-// appropritae to minimize the total size. 
+// appropritae to minimize the total size.
 diaryDrafts.save(function (err) {
   if (err) {
     // alert the user

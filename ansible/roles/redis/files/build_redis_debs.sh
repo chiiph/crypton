@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -e deb/redis ]]; then 
+if [[ -e deb/redis ]]; then
     rm -rf deb/redis
 fi
 mkdir -p deb/redis

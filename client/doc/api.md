@@ -10,14 +10,14 @@ Defaults to `localhost:2013`. You should override these before any other calls a
 
 ### crypton.generateAcount(username, passphrase, callback)
 
-_crypto_  
+_crypto_
 
     algorithms:
         AES256 CFB and 128 bit segment width (16 bytes)
         RSA
         KDF (PBKDF2 w/ 50,000 rounds)
 
-    generate: 
+    generate:
         32 random bytes hmac key for container names ("container_name_hmac_key")
         32 random bytes hmac key for general data authentication ("hmac_key")
         32 random bytes for ("salt_key")
@@ -26,14 +26,14 @@ _crypto_
         rsa keypair (2048 bits) (rsa_keypair_obj)
 
     outputs:
-        challenge_key = kdf(salt_challenge, passphrase) 
-        keypair_key = kdf(salt_key, passphrase) 
+        challenge_key = kdf(salt_challenge, passphrase)
+        keypair_key = kdf(salt_key, passphrase)
         keypair_as_string = rsa_keypair_obj.serialize_to_string()
         pubkey_as_string = rsa_keypair_obj.public_key.serialize_to_string()
         keypair_iv = sha256(uuid()).digest()[:16]
         cipher = aes256cfb(key=keypair_key, iv=keypair_iv)
         # XXX padding (must be length of multiple of 16)
-        keypair_serialized_ciphertext = cipher.encrypt(keypair_as_string) 
+        keypair_serialized_ciphertext = cipher.encrypt(keypair_as_string)
         symkey_ciphertext = rsa_keypair_obj.encrypt_to_private(symkey)
         container_name_hmac_key_iv = sha256(uuid()).digest()[:16]
         cipher = aes256cfb(key=symkey, iv=container_name_hmac_key_iv)
@@ -70,7 +70,7 @@ _crypto_
         keypair_as_string
         pubkey_as_string
 
-Creates an account object and generates the appropriate salts and keys. 
+Creates an account object and generates the appropriate salts and keys.
 
 Checks with the server to validate the username, and calls back with a potentially empty `error` argument and a conditional `account` argument which must still be `save()`d.
 
@@ -91,11 +91,11 @@ _crypto_
     cipher = aes256cfb(key=challenge_key, iv=iv, segment_width=128)
     challenge = cipher.encrypt(random_string)
 
-    # compute the answer we antipate from the client 
+    # compute the answer we antipate from the client
     answer_cipher = aes256cfb(key=challenge, iv=iv, segment_width=8)
     time_value_ciphertext = cipher.encrypt(time_value)
     expected_answer_digest = sha256(time_value_ciphertext).digest()
-    
+
     Persist the challenge to the database in the challenge table, so that we
     can check the challenge response when it comes in.  Get the challenge_id
     back for the inserted row.
@@ -111,7 +111,7 @@ _crypto_
         iv: base64(aes_iv),
         time_value: time_value
     }
-    
+
  Step 2: construct an answer to the challenge
 
     The way this works, is that we prove that given the salt_challenge, we can
@@ -121,13 +121,13 @@ _crypto_
     In this case, we're deriving the key, and then encrypting time_value using
     that key, and sending the ciphtertext back to the server.
 
-    challenge_key = kdf(salt_challenge, passphrase) 
+    challenge_key = kdf(salt_challenge, passphrase)
     cipher = aes256cfb(key=challenge_key, iv=iv, segment_width=128)
     challenge = cipher.decrypt(challenge)
 
     cipher = aes256cfb(key=challenge, iv=iv, segment_width=8)
     time_value_ciphertext = cipher.encrypt(time_value)
-    
+
     Post an answer to the challenge like this:
 
     {
@@ -217,7 +217,7 @@ Holds the current version hash of the session.
 
 ## Transactions
 
-Transactions are how all data is moved to the server. All `save()` methods transparently construct a transaction and commit it. 
+Transactions are how all data is moved to the server. All `save()` methods transparently construct a transaction and commit it.
 
 ### tx = session.transaction.create()
 

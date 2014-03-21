@@ -5,7 +5,7 @@ PKG_NAME=$1
 set -e
 set -x
 
-if [[ -e deb/${PKG_NAME:?} ]]; then 
+if [[ -e deb/${PKG_NAME:?} ]]; then
     rm -rf deb/$PKG_NAME
 fi
 mkdir -p deb/$PKG_NAME

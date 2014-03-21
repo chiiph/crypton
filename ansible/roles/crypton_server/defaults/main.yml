@@ -1,7 +1,7 @@
 ---
 
 
-runit_services: 
+runit_services:
  - { name: crypton_server }
 
 runit_stdio_log:

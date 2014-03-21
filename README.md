@@ -22,7 +22,7 @@ Most importantly, it has not been through a first round of refactoring, general
 code cleanup, and security review. It does not have comprehensive test
 coverage.  All of these things will change in the versions between v0.0.1 and
 v0.1.0, at which point we'll make a first stable release that we encourage for
-production and commercial uses. 
+production and commercial uses.
 
 ## Get Started
 

@@ -5,12 +5,12 @@ function generate_dev_secrets() {
 
     if [[ ! -e secrets/dev/id_translator.key ]]; then
         dd if=/dev/urandom of=secrets/dev/id_translator.key bs=96 count=1
-        chmod 400 secrets/dev/id_translator.key 
+        chmod 400 secrets/dev/id_translator.key
     fi
 
     if [[ ! -e secrets/dev/cookie_secret.key ]]; then
         dd if=/dev/urandom of=secrets/dev/cookie_secret.key bs=2048 count=1
-        chmod 400 secrets/dev/cookie_secret.key 
+        chmod 400 secrets/dev/cookie_secret.key
     fi
 
     grep -sq 'END DH PARAMETERS' secrets/dev/cryptondev.local-wildcard.pem || {
@@ -41,11 +41,11 @@ function add_key_file () {
     keyfile_homedir=/var/lib/lxc/${node:?}/rootfs/home/ubuntu
     keyfile_dir=$keyfile_homedir/.ssh
     keyfile_path=$keyfile_dir/authorized_keys
-    passwd_path=/var/lib/lxc/${node}/rootfs/etc/passwd 
+    passwd_path=/var/lib/lxc/${node}/rootfs/etc/passwd
     guest_uid=$(sudo grep ubuntu $passwd_path | awk -F: '{print $3}')
 
     # track down an appropriate source key file
-    keyfile_src=$HOME/.ssh/authorized_keys 
+    keyfile_src=$HOME/.ssh/authorized_keys
     if [[ ! -e $keyfile_src ]]; then
         for check in id_rsa.pub id_dsa.pub ; do
             keyfile_src=$HOME/.ssh/$check
@@ -110,7 +110,7 @@ function stop_nodes () {
 
     # ask them nicely to shut down
     if [[ -x /usr/bin/lxc-stop ]]; then
-        stop_cmd=/usr/bin/lxc-stop 
+        stop_cmd=/usr/bin/lxc-stop
     elif [[ -x /usr/bin/lxc-stutdown ]]; then
         stop_cmd=/usr/bin/lxc-shutdown
     else
@@ -202,7 +202,7 @@ function update_ssh_known_hosts () {
     fi
 
     nodes="$1"
-    for n in $nodes 
+    for n in $nodes
     do
         ssh-keygen -R $n
         ssh-keygen -F $n \
@@ -218,14 +218,14 @@ function allow_ubuntu_user_to_sudo () {
     nodes="$1"
     for n in $nodes
     do
-        if [[ -e /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo ]]; 
+        if [[ -e /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo ]];
         then
             continue
         fi
 
         echo 'ubuntu ALL = (ALL)NOPASSWD: ALL' \
-            | sudo sponge /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo 
+            | sudo sponge /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo
         sudo chmod 0440 /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo
-        sudo chown 0:0 /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo 
+        sudo chown 0:0 /var/lib/lxc/$n/rootfs/etc/sudoers.d/ubuntu_user_sudo
     done
 }

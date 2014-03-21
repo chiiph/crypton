@@ -19,14 +19,14 @@ create temp table txtmp_add_container on commit drop as
            nextval('version_identifier') as container_id,
            t.account_id,
            /* we'll update latest_record_id below */
-           null::int8 as latest_record_id 
+           null::int8 as latest_record_id
       from transaction t
       join transaction_add_container tac using (transaction_id)
      where transaction_id={{transactionId}};
 
 /*
-     where account_id=(select account_id 
-                         from account 
+     where account_id=(select account_id
+                         from account
                         where username='test_username');
 */
 /* create temp table for transaction_add_container_session_key
@@ -37,14 +37,14 @@ create temp table txtmp_add_container_session_key on commit drop as
     select tacsk.id,
            nextval('version_identifier') as container_session_key_id,
            /* there are two possibilities for the container_id when adding a
-            * session key: 
+            * session key:
             *   a new container added in this transaction
             *   an existing container
             * check for the new container case first, fallback to existing
             * container
             */
            coalesce(
-               (select container_id 
+               (select container_id
                   from txtmp_add_container
                  where name_hmac=tacsk.name_hmac),
                (select container_id
@@ -73,14 +73,14 @@ create temp table txtmp_add_container_session_key_share on commit drop as
       from transaction_add_container_session_key_share tacsks
      where transaction_id={{transactionId}};
 
-/* calculate new columns: 
+/* calculate new columns:
  *  container_record_id, container_id, container_session_key_id */
 
 create temp table txtmp_add_container_record on commit drop as
     select tar.id,
            nextval('version_identifier') as container_record_id,
            coalesce(
-               (select container_id 
+               (select container_id
                   from txtmp_add_container
                  where name_hmac=tar.name_hmac),
                (select container_id
@@ -117,9 +117,9 @@ create temp table txtmp_delete_message on commit drop as
 /* now, we can finally calculate the latest_record_id value for new containers
  * we're adding */
 update txtmp_add_container set latest_record_id=(
-    select max(container_record_id) 
+    select max(container_record_id)
       from txtmp_add_container_record
-     where txtmp_add_container_record.container_id = 
+     where txtmp_add_container_record.container_id =
            txtmp_add_container.container_id);
 
 /* COMMITTING THE TRANSACTION: PART 2: MODIFYING PRIMARY TABLES */
@@ -133,7 +133,7 @@ insert into container (container_id, account_id, name_hmac, latest_record_id)
       join txtmp_add_container tx_tac using (id)
       join transaction t using (transaction_id);
 
-insert into container_session_key (container_session_key_id, container_id, 
+insert into container_session_key (container_session_key_id, container_id,
     account_id, transaction_id, signature)
     select tx_tacsk.container_session_key_id, tx_tacsk.container_id,
            t.account_id, t.transaction_id, tacsk.signature
@@ -141,18 +141,18 @@ insert into container_session_key (container_session_key_id, container_id,
       join txtmp_add_container_session_key tx_tacsk using (id)
       join transaction t using (transaction_id);
 
-insert into container_session_key_share (container_session_key_share_id, 
-    container_session_key_id, account_id, to_account_id, 
+insert into container_session_key_share (container_session_key_share_id,
+    container_session_key_id, account_id, to_account_id,
     transaction_id, session_key_ciphertext)
     select tx_tacsks.container_session_key_share_id,
-           tx_tacsks.container_session_key_id, 
+           tx_tacsks.container_session_key_id,
            t.account_id, tacsks.to_account_id,
            t.transaction_id, tacsks.session_key_ciphertext
       from transaction_add_container_session_key_share tacsks
       join txtmp_add_container_session_key_share tx_tacsks using (id)
       join transaction t using (transaction_id);
 
-insert into container_record (container_record_id, container_id, 
+insert into container_record (container_record_id, container_id,
     container_session_key_id, account_id, transaction_id,  payload_ciphertext)
     select tx_tacr.container_record_id, tx_tacr.container_id,
            tx_tacr.container_session_key_id, t.account_id,

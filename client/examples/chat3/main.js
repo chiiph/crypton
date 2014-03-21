@@ -337,7 +337,7 @@ app.createConversation = function (peer, callback) {
           text: app.session.account.username + ' started a conversation'
         }
       };
-      
+
       app.conversations.save(function (err) {
         if (err) {
           console.log(err);
@@ -349,9 +349,9 @@ app.createConversation = function (peer, callback) {
             console.log(err);
             return callback(err);
           }
-          
+
           callback();
-        }); 
+        });
       });
     });
   });
@@ -450,7 +450,7 @@ app.sendMessage = function (text) {
     action: 'chat',
     text: text
   };
-  
+
   var username = app.conversation.username;
   app.conversations.keys[username].lastMessage = message;
   app.conversations.save(function (err) {

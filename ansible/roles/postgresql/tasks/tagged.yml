@@ -2,14 +2,14 @@
 
 - name: add the apt keys for postgresql provided DEBs
   sudo: True
-  apt_key: id=ACCC4CF8 state=present 
+  apt_key: id=ACCC4CF8 state=present
            data="{{ lookup('file', 'apt.postgresql.org_key_ACCC4CF8.asc' ) }}"
 
 
 - name: add the apt source repo for postgresql DEBs
   sudo: True
   register: add_pg_apt_result
-  apt_repository: 
+  apt_repository:
    repo="deb http://apt.postgresql.org/pub/repos/apt/ {{ansible_distribution_release}}-pgdg main"
 
 - name: update apt after adding postgresql source
@@ -87,7 +87,7 @@
   when: pg_server
   sudo: True
   template: src=logrotate.conf.j2 dest=/etc/logrotate.d/postgresql-common
-            owner=root group=root mode=644 
+            owner=root group=root mode=644
 
 - name: write postgresql hba conf file
   sudo: True

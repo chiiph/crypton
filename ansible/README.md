@@ -3,7 +3,7 @@ Deployment Automation
 
 We use ansible to automate configuring a machine (or many machines) to serve
 Crypton.  A similar system Ansible configuration (with only different
-variables) is used for dev and production.  
+variables) is used for dev and production.
 
 This arranges things like installing nginx, postgresql, redis, nodejs, the
 crypton server, placing certificates, arranging run scripts, usix users,
@@ -47,7 +47,7 @@ Ansible (by applying the `dev_proxy` role) also installs and configures a squid
 http proxy server on the crypton server machine, listening on port `3128`.  If
 you configure your browser to use this proxy, you'll be able to browse to URLs
 like `https://server.cryptondev.local/examples/diary/` (after accepting the SSL
-certificate.)  
+certificate.)
 
 Note that the proxy is configured to ONLY allow connections to the local
 machine, ports 80 and 443.  So if a cryptondev.local site makes references to

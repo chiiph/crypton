@@ -88,9 +88,9 @@ if result == 'refresh':
     old_version = session.account.version()
     session.account.refresh()
     new_version = session.account.version()
-    result = session.account.save() 
+    result = session.account.save()
 
-# === introducing object storage via containers 
+# === introducing object storage via containers
 # we're going to store our app's data using objects, like a traditional object
 # database.  Many people are already familiar with object databases such as
 # ZODB.  Our object database is a similar concept, while making zero knowledge
@@ -104,7 +104,7 @@ if result == 'refresh':
 # requirements might just use one container, and store every object in that
 # container. other apps may use many separate containers.  A container must be
 # fetched in its full length from the server and decrypted client side for the
-# objects inside it to be read.  
+# objects inside it to be read.
 
 container = session.load('diary') # load this container from the server to
                                   # local, making access to all objects
@@ -146,7 +146,7 @@ draft_entries.push(new_entry)
 # changes to either diary_entries or draft_entries, both would be saved. the
 # default parameters for saving objects preserves object history (i.e. previous
 # versions of the object are still reachable) and uses diffing where
-# appropritae to minimize the total size. 
+# appropritae to minimize the total size.
 result = container.save()
 
 # let's add some more content to this entry.  We'll store the text content
@@ -194,10 +194,10 @@ modified_objects = container.modified_objects()
 # atomically save an object, multiple objects, or all modified objects
 result = myobject.save()
 result = container.save([myobject])
-result = container.save_keys(['myobjectname'], 
+result = container.save_keys(['myobjectname'],
                              # some optional paramaters
 result = container.save() # save everything that's been locally modified
-result = container.save(  # give the container more direction on finding 
+result = container.save(  # give the container more direction on finding
                           # modified objects. by default it will do a deep
                           # comparsion of every object that's been retrieved
                           # from the container with .get(), which is guaranteed
@@ -207,7 +207,7 @@ result = container.save(  # give the container more direction on finding
 
 # atomically save across multiple containers using a transaction:
 tx = session.tx()
-tx.save(myobject)  # add a particular object to a transaction 
+tx.save(myobject)  # add a particular object to a transaction
 tx.save([myobject1, myobject2]) # add a list of objects
 tx.save(container1, [another_object, and_another_object]) # add a list of objects
 tx.save(container3, [another_object, and_another_object])
@@ -260,18 +260,18 @@ if not old_identifier == new_identifier:
                                  # several objects would give the new versions
                                  # of those objects each the same new version
                                  # identifier.
-        entry.author    # the account name the change came from. 
+        entry.author    # the account name the change came from.
         entry.timestamp # this is server time from whenever .save() was called.
                         # not the time the object actually changed. (also
                         # guaranteed to be accurate by the server.)
-        entry.diffsize  # the size of the binary storage of the diff (after 
+        entry.diffsize  # the size of the binary storage of the diff (after
                         # compression, encryption, etc.)  In other words, the
                         # length of the ciphertext of the diff.
 
         # for these, the server cannot guarantee anything about the contents, since
         # they are unreadable to the server.
 
-        entry.get_serialized_diff() # get the serialize (as a string) of the 
+        entry.get_serialized_diff() # get the serialize (as a string) of the
                                     # diff (the plaintext.)
 
         entry.get_diff() # get the actual diff object.
@@ -283,8 +283,8 @@ if not old_identifier == new_identifier:
 
         old_object.save() # throws an exception; historical objects are
                           # immutable.
-        
-    
+
+
 # === zero knowledge sharing of containers/objects with peers.
 # you can share with an individual peer or with defined groups (below.) sharing
 # happens by making objects available to peers or groups.  The objects continue
@@ -308,9 +308,9 @@ container.unshare(alice)  # just remove alice
 result = container.save() # still have to check for conflicts/retry, even
                           # though you're not changing any data.
 
-# what really happens when bob unshares a container with alice? 
+# what really happens when bob unshares a container with alice?
 #  - we tell the server to no longer make the contents of the container
-#    readable to alice (i.e. so that alice is disallowed by the server 
+#    readable to alice (i.e. so that alice is disallowed by the server
 #    from retreving the encrypted data stream of the container.)
 #  - we re-key the container such that all further writes to the container
 #    continue to be unreadable to alice, even if alice happens to be Mallory's
@@ -351,9 +351,9 @@ bob_object = bob_container.get('bobs_object')
 # their inbox.
 
 # allow our peer alice to send us stuff.
-session.inbox.allow_messages(alice, 
-    { max_unread_messages: 1000, 
-         max_message_size: 10000, 
+session.inbox.allow_messages(alice,
+    { max_unread_messages: 1000,
+         max_message_size: 10000,
           max_unread_size: 1000000 })
 # TODO: resolve this question: should it be possible to blanket allow messages
 # from anyone? maybe a limit of just a few small messages?
@@ -392,7 +392,7 @@ for msg in session.inbox.list():
     msg.get_body()
     msg.delete() # it's faster to build up a list of IDs and delete them all at
                  # once (as below.)
-    tx.add(msg.delete)  # add deleting this message to a running transaction, 
+    tx.add(msg.delete)  # add deleting this message to a running transaction,
                         # such that deleting the message can happen atomically
                         # in combination with changes to objects.
 tx.commit() # rememer to commit our transaction
@@ -400,8 +400,8 @@ tx.commit() # rememer to commit our transaction
 # list with filtering. all parameters optional. specifying no filtering
 # parameters gets same results as list, except that the inclusion of headers in
 # the result set can be controlled.
-session.inbox.filter(peer = bob, 
-                     after = earliest_time, 
+session.inbox.filter(peer = bob,
+                     after = earliest_time,
                      before = latest_time,
                      include_headers = True,
                      header_filter = my_filter_function,
@@ -420,7 +420,7 @@ if message_id == 'error'
 # group membership always must happen by invitation, such that an existing
 #   member (with read privledges) invites new members.
 # a group has a creator.
-# members maybe given permission (individually) to 
+# members maybe given permission (individually) to
 #  - read data intended for the group
 #  - author data as the group
 #  - invite new members
@@ -450,7 +450,7 @@ if message_id == 'error'
 # - storage for the group object is outside the billable storage amount for any
 #   particular account.
 
-# TODO: standardize result objects. 
+# TODO: standardize result objects.
 #   result.status, result.error, result.error_message
 
 # TODO: expose the internal container data for sharing histroy. like, to see

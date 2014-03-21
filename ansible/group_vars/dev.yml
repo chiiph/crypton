@@ -13,7 +13,7 @@ database_master: "{{ inventory_hostname }}"
 # no db slaves present
 database_slaves: []
 
- 
+
 # mapping of groups of machines, which database users and databases they
 # are allowed to connect to.
 pg_hba_group_access:

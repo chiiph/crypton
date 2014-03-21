@@ -25,7 +25,7 @@ var middleware = module.exports = {};
 /**!
  * ### verifySession(req, res, next)
  * Determine if the `session-identifier` header exists in the session store
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Function} next
